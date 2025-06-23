@@ -3,7 +3,7 @@
 
 struct String {
     char* data;
-    int length;
+    char Mark;
 };
 
 struct Node {

@@ -6,7 +6,7 @@
 
 void init(String* s) {
     s->data = nullptr;
-    s->length = 0;
+    s->Mark = ';';
 }
 
 void free(String* s) {
@@ -14,30 +14,35 @@ void free(String* s) {
         delete[] s->data;
     }
     s->data = nullptr;
-    s->length = 0;
 }
 
 void copyString(String* dest, const String* src) {
-    dest->length = src->length;
-    if (dest->length > 0) {
-        dest->data = new char[dest->length + 1];
-        for (int i = 0; i < dest->length; ++i) {
+    int length = 0;
+    if (src->data) {
+        while (src->data[length] != src->Mark) {
+            length++;
+        }
+    }
+
+    if (length > 0 || src->data != nullptr) {
+        dest->data = new char[length + 1];
+        for (int i = 0; i < length; ++i) {
             dest->data[i] = src->data[i];
         }
-        dest->data[dest->length] = '\0';
+        dest->data[length] = dest->Mark;
     } else {
         dest->data = nullptr;
     }
 }
 
 void readFromStdString(String* s, const std::string& str) {
-    s->length = str.length();
-    if (s->length > 0) {
-        s->data = new char[s->length + 1];
-        for (int i = 0; i < s->length; ++i) {
+    int length = str.length();
+    if (length > 0) {
+        s->data = new char[length + 1];
+        for (int i = 0; i < length; ++i) {
             s->data[i] = str[i];
         }
-        s->data[s->length] = '\0';
+        s->data[length] = s->Mark;
     } else {
         s->data = nullptr;
     }
@@ -85,7 +90,10 @@ void printList(const LinkedList* list, std::ofstream& out) {
     Node* current = list->head;
     while (current != nullptr) {
         if (current->data.data) {
-            out << current->data.data << "\n";
+            for (int i = 0; current->data.data[i] != current->data.Mark; ++i) {
+                out << current->data.data[i];
+            }
+            out << "\n";
         }
         current = current->next;
     }
@@ -111,8 +119,8 @@ int main() {
         }
 
         if (count > 0) {
-            in.close();
-            in.open("input.txt");
+            in.clear();
+            in.seekg(0);
 
             while (std::getline(in, line)) {
                 String str;
@@ -121,11 +129,11 @@ int main() {
                 addNode(&list, &str);
                 free(&str);
             }
-            in.close();
             printList(&list, out);
         } else {
             out << "Исходный список пуст\n";
         }
+        in.close();
     } else {
         out << "Исходный список не найден\n";
     }
@@ -139,8 +147,8 @@ int main() {
         }
         
         if (count > 0) {
-            insert.close();
-            insert.open("insert.txt");
+            insert.clear();
+            insert.seekg(0);
             
             String* newElements = new String[count];
             for (int i = 0; i < count; ++i) {
