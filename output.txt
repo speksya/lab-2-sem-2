@@ -1,10 +1,4 @@
 Исходный список:
-First
-Second
+New
 
-После вставки 3 элементов:
-First
-Second
-Third
-Fourth
-Fifth
+Файл для вставки не найден
