@@ -1,0 +1,10 @@
+Исходный список:
+First
+Second
+
+После вставки 3 элементов:
+First
+Second
+Third
+Fourth
+Fifth
