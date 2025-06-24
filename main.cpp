@@ -26,7 +26,7 @@ void copyString(String* dest, const String* src) {
 
     if (length > 0 || src->data != nullptr) {
         dest->data = new char[length + 1];
-        for (int i = 0; i < length; ++i) {
+        for (int i = 0; src->data[i] != src->Mark; ++i) {
             dest->data[i] = src->data[i];
         }
         dest->data[length] = dest->Mark;
